@@ -7,8 +7,6 @@ import { PDFDocument, copyStringIntoBuffer } from "pdf-lib";
 
 import download from "downloadjs";
 
-
-
 const EditModal = ({
   shipmentType,
   orderToBeEditedId,
@@ -165,11 +163,11 @@ const EditModal = ({
   );
 };
 
-const BookedOrdersModal = ({
+export default function BookedOrdersModal({
   setFilterData,
   filterData: SelectedOrders,
   setShowBookedOrdersModal,
-}) => {
+}) {
   const [bookedOrdersData, setBookedOrdersData] = useState([]);
   const [shipmentType, setShipmentType] = useState({
     leopards: ["Overnight", "Overland", "Detain"],
@@ -335,7 +333,7 @@ const BookedOrdersModal = ({
     // });
     // return;
 
-    axios.post("http://localhost:4000/cancel", [1,2,3,3]).then((res) => {
+    axios.post("http://localhost:4000/cancel", [1, 2, 3, 3]).then((res) => {
       setBookedOrdersData(res.data);
       let pdfBytes = Object.values(res.data.pdfBytes);
       const blob = new Blob([new Uint8Array(pdfBytes)], {
@@ -957,6 +955,4 @@ const BookedOrdersModal = ({
       )}
     </>
   );
-};
-
-export default BookedOrdersModal;
+}
