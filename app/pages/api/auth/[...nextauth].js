@@ -10,7 +10,7 @@ import FacebookProvider from "next-auth/providers/facebook";
 // });
 import NextAuth from "next-auth";
 
-const authOptions = {
+export const authOptions = {
   providers: [
     FacebookProvider({
       clientId: "392666276471000",
