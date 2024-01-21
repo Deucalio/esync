@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import BookedOrdersModal from "../components/BookedOrdersModal";
 import Link from "next/link";
+import Image from "next/image";
 function Loading() {
   // You can add any UI inside Loading, including a Skeleton.
   // Animate spin using TailwindCSS classes.
@@ -309,7 +310,7 @@ export default function Home() {
         </span>
         <ul className="text-white">
           <li className="flex flex-col items-center gap-4 xl:flex-row lg:pl-9 cursor-pointer justify-center">
-            <img
+            <Image
               className="h-28"
               src="https://i.imgur.com/HkYc6sn.png"
               alt=""

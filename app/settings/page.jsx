@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -409,7 +410,7 @@ export default function Page() {
           </span>
           <ul className="text-white">
             <li className="flex flex-col items-center gap-4 xl:flex-row lg:pl-9 cursor-pointer justify-center">
-              <img
+              <Image
                 className="h-28"
                 src="https://i.imgur.com/HkYc6sn.png"
                 alt=""
@@ -695,7 +696,7 @@ export default function Page() {
           {page === "configuration" && (
             <div class="grid grid-cols-1 items-center gap-2 lg:grid-cols-7  border-slate-700 pb-5">
               <div class="flex flex-row items-center gap-1 transition-all duration-500 relative">
-                <img
+                <Image
                   className="w-16"
                   src="
                   https://assets.stickpng.com/images/58482ec0cef1014c0b5e4a70.png"
