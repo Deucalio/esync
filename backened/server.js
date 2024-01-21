@@ -36,29 +36,30 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get("/orders", async (req, res) => {
-  let orders = [];
+  res.send("hello");
+  // let orders = [];
 
-  let config = {
-    method: "get",
-    maxBodyLength: Infinity,
-    url: "https://{shop_name}.myshopify.com/admin/api/2023-10/orders.json?status=open&limit=200&financial_status=unpaid&fulfillment_status=unfulfilled",
-    headers: {
-      "X-Shopify-Access-Token": "{access_token}",
-    },
-  };
+  // let config = {
+  //   method: "get",
+  //   maxBodyLength: Infinity,
+  //   url: "https://{shop_name}.myshopify.com/admin/api/2023-10/orders.json?status=open&limit=200&financial_status=unpaid&fulfillment_status=unfulfilled",
+  //   headers: {
+  //     "X-Shopify-Access-Token": "{access_token}",
+  //   },
+  // };
 
-  let order_req = await axios.request(config);
-  order_req = order_req.data.orders.filter((order) =>
-    order.tags.toLowerCase().includes("")
-  );
-  order_req.forEach((order) => {
-    orders.push({
-      ...order,
-      shop_name: "{shop_name}",
-    });
-  });
+  // let order_req = await axios.request(config);
+  // order_req = order_req.data.orders.filter((order) =>
+  //   order.tags.toLowerCase().includes("")
+  // );
+  // order_req.forEach((order) => {
+  //   orders.push({
+  //     ...order,
+  //     shop_name: "{shop_name}",
+  //   });
+  // });
 
-  res.send(orders);
+  // res.send(orders);
 });
 
 // _____________________

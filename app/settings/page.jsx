@@ -156,7 +156,7 @@ const Shippers = () => {
   );
 };
 
-export default function page() {
+export default function Page() {
   const navElement = useRef(null);
   const arrowElement = useRef(null);
   const sidebarItems = useRef(null);
@@ -446,7 +446,10 @@ export default function page() {
                 <p className="transition-all duration-300">Home</p>
               </li>
 
-              <li onClick={() => router.push("/products")} className="flex h-8 xl:h-10 flex-row items-center gap-1 text-xs transition-all duration-500 hover:cursor-pointer hover:bg-gray-500 hover:bg-opacity-25 lg:gap-4 lg:pl-8">
+              <li
+                onClick={() => router.push("/products")}
+                className="flex h-8 xl:h-10 flex-row items-center gap-1 text-xs transition-all duration-500 hover:cursor-pointer hover:bg-gray-500 hover:bg-opacity-25 lg:gap-4 lg:pl-8"
+              >
                 <svg
                   className="w-4 h-4 xl:h-6 xl:w-6 fill-white"
                   xmlns="http://www.w3.org/2000/svg"
@@ -457,7 +460,10 @@ export default function page() {
 
                 <p className="transition-all duration-300">Products</p>
               </li>
-              <li onClick={() => router.push("/orders")} className="flex h-8 xl:h-10 flex-row items-center gap-1 text-xs transition-all duration-500 hover:cursor-pointer hover:bg-gray-500 hover:bg-opacity-25 lg:gap-4 lg:pl-8">
+              <li
+                onClick={() => router.push("/orders")}
+                className="flex h-8 xl:h-10 flex-row items-center gap-1 text-xs transition-all duration-500 hover:cursor-pointer hover:bg-gray-500 hover:bg-opacity-25 lg:gap-4 lg:pl-8"
+              >
                 <svg
                   className="w-4 h-4 xl:h-6 xl:w-6 fill-white"
                   xmlns="http://www.w3.org/2000/svg"
@@ -468,7 +474,10 @@ export default function page() {
 
                 <p className="transition-all duration-300">Orders</p>
               </li>
-              <li onClick={() => router.push("/customers")} className="flex h-8 xl:h-10 flex-row items-center gap-1 text-xs transition-all duration-500 hover:cursor-pointer hover:bg-gray-500 hover:bg-opacity-25 lg:gap-4 lg:pl-8">
+              <li
+                onClick={() => router.push("/customers")}
+                className="flex h-8 xl:h-10 flex-row items-center gap-1 text-xs transition-all duration-500 hover:cursor-pointer hover:bg-gray-500 hover:bg-opacity-25 lg:gap-4 lg:pl-8"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -486,7 +495,10 @@ export default function page() {
 
                 <p className="transition-all duration-300">Customers</p>
               </li>
-              <li onClick={() => router.push("/finance")} className="flex h-8 xl:h-10 flex-row items-center gap-1 text-xs transition-all duration-500 hover:cursor-pointer hover:bg-gray-500 hover:bg-opacity-25 lg:gap-4 lg:pl-8">
+              <li
+                onClick={() => router.push("/finance")}
+                className="flex h-8 xl:h-10 flex-row items-center gap-1 text-xs transition-all duration-500 hover:cursor-pointer hover:bg-gray-500 hover:bg-opacity-25 lg:gap-4 lg:pl-8"
+              >
                 <svg
                   className="w-4 h-4 xl:h-6 xl:w-6 fill-white"
                   xmlns="http://www.w3.org/2000/svg"
@@ -498,7 +510,10 @@ export default function page() {
 
                 <p className="transition-all duration-300">Finance</p>
               </li>
-              <li onClick={() => router.push("/settings")} className="flex h-8 xl:h-10 cursor-pointer flex-row items-center gap-1 bg-gray-500 bg-opacity-25 text-xs lg:gap-4 lg:pl-8">
+              <li
+                onClick={() => router.push("/settings")}
+                className="flex h-8 xl:h-10 cursor-pointer flex-row items-center gap-1 bg-gray-500 bg-opacity-25 text-xs lg:gap-4 lg:pl-8"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
