@@ -2,21 +2,30 @@
 
 import { useEffect, useRef, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./pages/api/auth/[...nextauth]";
 
 function MyComponent() {
   const facebook = () => {
     signIn("facebook");
   };
-  return <button className="bg-blue-400 text-md text-slate-100" onClick={facebook}>Sign in with Facebook</button>;
+  return (
+    <button
+      className="bg-blue-400 text-md text-slate-100 py-2 px-3"
+      onClick={facebook}
+    >
+      Sign in with Facebook
+    </button>
+  );
 }
-export default function Home() {
-  const { data: session } = useSession();
+export default async function Home() {
+  const session = await getServerSession(authOptions);
 
   return (
     <>
       <p className="text-roes-500 text-3xl">Hello World</p>
       <p className="text-roes-500 text-3xl">
-        {session ? `Welcome, ${session.user.name}` : "You are not signed in."}
+        <pre>{JSON.stringify(session, null, 2)}</pre>
       </p>
       <MyComponent />
     </>
