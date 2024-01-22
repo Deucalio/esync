@@ -1,16 +1,15 @@
 "use client";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import React from "react";
 
-function MyComponent() {
-  return (
-    <button onClick={() => signIn("facebook")}>Sign in with Facebook</button>
-  );
-}
-
-export default function Page() {
+const Page = () => {
+  const session = useSession();
+  console.log("ses", session);
   return (
     <>
-      <MyComponent />
+      <button onClick={() => signIn("google")}>Login with Google</button>
     </>
   );
-}
+};
+
+export default Page;

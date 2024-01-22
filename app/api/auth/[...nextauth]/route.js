@@ -1,16 +1,14 @@
-import NextAuth from "next-auth";
-import FacebookProvider from "next-auth/providers/facebook";
+import nextAuth from "next-auth";
+import NextAuth from "next-auth/next";
+import GoogleProvider from "next-auth/providers/google";
 
-export const authOptions = {
+const handler = nextAuth({
   providers: [
-    FacebookProvider({
-      clientId: "392666276471000",
-      clientSecret: "8e63766e1a05b7569adfc9b8af65624f",
+    GoogleProvider({
+      clientId: "373888449280-t3nijpkkc53p5lq2es7o49buhjng6hbi.apps.googleusercontent.com",
+      clientSecret: "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",
     }),
   ],
-  secret: "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e",
-};
-
-export const handler = NextAuth(authOptions);
+});
 
 export { handler as GET, handler as POST };
