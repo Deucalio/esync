@@ -10,7 +10,7 @@ const handler = nextAuth({
       clientSecret: "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",
     }),
   ],
-  secret: "asdasdasdasd",
+  secret: "ImaAHEROE!123123",
 });
 
 export { handler as GET, handler as POST };
