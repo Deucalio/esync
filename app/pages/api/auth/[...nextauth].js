@@ -17,6 +17,7 @@ export const authOptions = {
       clientSecret: "8e63766e1a05b7569adfc9b8af65624f",
     }),
   ],
+  secret: process.env.SECRET,
 };
 
 export default NextAuth(authOptions);
