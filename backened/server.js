@@ -35,6 +35,10 @@ const shipperInfo = [
 app.use(bodyParser.json());
 app.use(cors());
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+})
+
 app.get("/orders", async (req, res) => {
   res.send("hello");
   // let orders = [];
