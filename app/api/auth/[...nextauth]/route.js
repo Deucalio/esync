@@ -8,6 +8,7 @@ const handler = nextAuth({
       clientId: "373888449280-t3nijpkkc53p5lq2es7o49buhjng6hbi.apps.googleusercontent.com",
       clientSecret: "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",
     }),
+    secret: "asdasdasdasd"
   ],
 });
 
