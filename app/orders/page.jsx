@@ -311,6 +311,8 @@ export default function Home() {
         <ul className="text-white">
           <li className="flex flex-col items-center gap-4 xl:flex-row lg:pl-9 cursor-pointer justify-center">
             <Image
+              width="0"
+              height="0"
               className="h-28"
               src="https://i.imgur.com/HkYc6sn.png"
               alt=""

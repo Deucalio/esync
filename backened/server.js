@@ -36,8 +36,12 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
-})
+  // res.send("Hello World!");
+  res.status(200).send({
+    message: "Hello from server.js",
+    data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  });
+});
 
 app.get("/orders", async (req, res) => {
   res.send("hello");

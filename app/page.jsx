@@ -1,5 +1,5 @@
 "use client";
 
-export default async function Page() {
-  return <p>Welcome !</p>;
+export default function Page() {
+  return <p>Dashboard !</p>;
 }
