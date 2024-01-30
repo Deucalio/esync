@@ -23,6 +23,15 @@ require("dotenv").config();
 app.use(bodyParser.json());
 app.use(cors());
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
 app.get("/", async (req, res) => {
   // res.send("Hello World!");
   // const users = await User.find({});
@@ -37,16 +46,14 @@ app.post("/login", async (req, res) => {
   console.log("req.body", req.body);
 
   // res.status(400).json({ message: "Invalid Credentials" });
-  res
-    .status(200)
-    .json({
-      id: 1,
-      email,
-      name: "Hamad Ali",
-      firstName: "Hamad",
-      lastName: "Ali",
-      store: "Shopify",
-    });
+  res.status(200).json({
+    id: 1,
+    email,
+    name: "Hamad Ali",
+    firstName: "Hamad",
+    lastName: "Ali",
+    store: "Shopify",
+  });
 });
 
 // _____________________
