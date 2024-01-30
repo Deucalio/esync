@@ -26,9 +26,9 @@ export default function Page() {
 
   useEffect(() => {
     console.log("user", user);
-    if (user) {
-      getData();
-    }
+    // if (user) {
+    //   getData();
+    // }
   }, [user]);
 
   const getData = async () => {
