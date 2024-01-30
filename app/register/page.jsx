@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -355,7 +356,9 @@ const Page = () => {
     <main className="register-route relative h-screen">
       <section className="relative z-10 mx-auto grid h-5/6 translate-y-11 grid-cols-8 rounded-3xl border-indigo-950 bg-black shadow-md shadow-violet-900 md:w-2/4">
         <div className="col-span-3 overflow-hidden rounded-lg">
-          <img
+          <Image
+            height={500}
+            width={0}
             className="h-full rounded-3xl bg-cover"
             src="https://i.imgur.com/9pSisLC.jpg"
             alt=""
