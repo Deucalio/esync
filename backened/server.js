@@ -19,28 +19,28 @@ const bwipjs = require("bwip-js");
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 require("dotenv").config();
-
-// LEOPARDS CITIES LIST ! (Needs to be Synced every Week)
-
-const shipperInfo = [
-  {
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    special_instructions: "",
-  },
-];
+const mongoose = require("mongoose");
+const User = require("./models/User");
 
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-  // res.send("Hello World!");
-  res.status(200).send({
-    message: "Hello from server.js",
-    data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+mongoose
+  .connect(process.env.MONGO_CONNECTION_URL, {})
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err) => {
+    console.log("Error: ", err);
   });
+
+app.use("/api", require("./routers/userRouter"));
+
+app.get("/", async (req, res) => {
+  // res.send("Hello World!");
+  const users = await User.find({});
+  console.log(users);
+  res.send(users);
 });
 
 app.get("/orders", async (req, res) => {
