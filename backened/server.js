@@ -19,22 +19,11 @@ const bwipjs = require("bwip-js");
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 require("dotenv").config();
-const mongoose = require("mongoose");
-const User = require("./models/User");
 
 app.use(bodyParser.json());
 app.use(cors());
 
-mongoose
-  .connect(process.env.MONGO_CONNECTION_URL, {})
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
-    console.log("Error: ", err);
-  });
 
-app.use("/api", require("./routers/userRouter"));
 
 app.get("/", async (req, res) => {
   // res.send("Hello World!");
