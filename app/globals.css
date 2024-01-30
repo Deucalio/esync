@@ -1,6 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.register-route {
+  background-color: #130f40;
+  background-image: linear-gradient(315deg, #130f40 0%, #000000 74%);
+  font-family: "Poppins";
+}
 
 body {
   background-color: black;
@@ -225,23 +233,29 @@ label:active {
   border: 0px none #000000;
 }
 
-
-
-
-
-
-
-
-
 .bounce {
   animation: bounce 2s ease infinite;
 }
 @keyframes bounce {
-    70% { transform:translateY(0%); }
-    80% { transform:translateY(-15%); }
-    90% { transform:translateY(0%); }
-    95% { transform:translateY(-7%); }
-    97% { transform:translateY(0%); }
-    99% { transform:translateY(-3%); }
-    100% { transform:translateY(0); }
+  70% {
+    transform: translateY(0%);
+  }
+  80% {
+    transform: translateY(-15%);
+  }
+  90% {
+    transform: translateY(0%);
+  }
+  95% {
+    transform: translateY(-7%);
+  }
+  97% {
+    transform: translateY(0%);
+  }
+  99% {
+    transform: translateY(-3%);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
