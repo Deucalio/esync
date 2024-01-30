@@ -1,40 +1,32 @@
+import { auth } from "./auth";
 import { NextResponse } from "next/server";
 
-async function delayedPromise() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(false);
-    }, 3000); // 3000 milliseconds = 3 seconds
-  });
-}
-// This function can be marked `async` if using `await` inside
-export async function middleware(request) {
-  const isLoggedIn = await delayedPromise();
+export default auth((req) => {
+  // req.auth
+  const isLoggedIn = !!req.auth;
+  // console.log("req", req.nextUrl.pathname);
+  console.log("isLoggedIn", isLoggedIn);
+
+  // If the user is not logged in, he can't visit any page except the login page or the signup page /register
 
   if (!isLoggedIn) {
-    // If the user is not Logged In, he can only visit register and login pages
     if (
-      request.nextUrl.pathname !== "/login" &&
-      request.nextUrl.pathname !== "/register"
+      req.nextUrl.pathname !== "/login" &&
+      req.nextUrl.pathname !== "/register"
     ) {
-      console.log("redirecting to login");
-      return NextResponse.redirect(new URL("/login", request.url));
+      return NextResponse.redirect(new URL("/login", req.url));
     }
   }
 
-  console.log("middleware: ", request.nextUrl.pathname, request.url);
-}
+  // If the user is logged in, he can't visit the login Page, so we will redirect him to the home page
+  if (isLoggedIn) {
+    if (req.nextUrl.pathname === "/login") {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+  }
+});
 
-// See "Matching Paths" below to learn more
+// Optionally, don't invoke Middleware on some paths
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };

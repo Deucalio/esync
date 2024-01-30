@@ -23,14 +23,33 @@ require("dotenv").config();
 app.use(bodyParser.json());
 app.use(cors());
 
-
-
 app.get("/", async (req, res) => {
   // res.send("Hello World!");
-  const users = await User.find({});
-  console.log(users);
-  res.send(users);
+  // const users = await User.find({});
+  const userEmail = req.headers["x-user-email"];
+
+  res.send(userEmail);
 });
+
+// LOGIN AND REGISTER ENDPOINTS
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  console.log("req.body", req.body);
+
+  // res.status(400).json({ message: "Invalid Credentials" });
+  res
+    .status(200)
+    .json({
+      id: 1,
+      email,
+      name: "Hamad Ali",
+      firstName: "Hamad",
+      lastName: "Ali",
+      store: "Shopify",
+    });
+});
+
+// _____________________
 
 app.get("/orders", async (req, res) => {
   res.send("hello");

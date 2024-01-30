@@ -358,10 +358,10 @@ const Page = () => {
         <div className="col-span-3 overflow-hidden rounded-lg">
           <Image
             height={500}
-            width={0}
+            width={500}
             className="h-full rounded-3xl bg-cover"
             src="https://i.imgur.com/9pSisLC.jpg"
-            alt=""
+            alt="e sync logo"
           />
         </div>
         {otp === "" && (

@@ -1,5 +1,5 @@
 "use server";
-import { auth, signIn, signOut } from "../auth";
+import { auth, signIn, signOut } from "../../auth";
 
 const validCredentials = async (credential) => {
   // send request to nodejs backened

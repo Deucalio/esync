@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 // import { auth, signIn, signOut } from "../../auth";
 import Login from "./login";
+import Image from "next/image";
 const Page = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -20,10 +21,12 @@ const Page = () => {
     <main className="register-route relative h-screen">
       <section className="relative z-10 mx-auto grid h-5/6 translate-y-11 grid-cols-8 rounded-3xl border-indigo-950 bg-black shadow-md shadow-violet-900 md:w-2/4">
         <div className="col-span-3 overflow-hidden rounded-lg">
-          <img
+          <Image
+            height={500}
+            width={500}
             className="h-full rounded-3xl bg-cover"
             src="https://i.imgur.com/9pSisLC.jpg"
-            alt=""
+            alt="e sync logo"
           />
         </div>
         <div className="col-span-5 overflow-scroll rounded-3xl border-fuchsia-400 py-8 pl-24 md:pl-8 lg:overflow-hidden">
