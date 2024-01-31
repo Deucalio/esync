@@ -21,7 +21,13 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 require("dotenv").config();
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://esync.vercel.app",
+    credentials: true,
+    
+  })
+);
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -35,9 +41,22 @@ app.use(function (req, res, next) {
 app.get("/", async (req, res) => {
   // res.send("Hello World!");
   // const users = await User.find({});
-  const userEmail = req.headers["x-user-email"];
+  const userEmail = req.headers["email"];
+  console.log("usermeail: ", userEmail);
 
-  res.send(userEmail);
+  // res.send(userEmail);
+
+  let config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: "https://nakson.myshopify.com/admin/api/2023-10/orders.json?status=open&limit=200",
+    headers: {
+      "X-Shopify-Access-Token": "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",
+    },
+  };
+
+  let order_req = await axios.request(config);
+  res.send(order_req.data);
 });
 
 // LOGIN AND REGISTER ENDPOINTS

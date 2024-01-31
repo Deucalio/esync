@@ -9,6 +9,8 @@ export default function Page() {
   const data = useSession();
   const [user, setUser] = useState(null);
 
+  const [orders, setOrders] = useState([]);
+
   const handleLogout = (e) => {
     e.preventDefault();
     Logout();
@@ -19,21 +21,37 @@ export default function Page() {
     setUser(data);
   };
 
+  const getData = async () => {
+    // send request to backend (localhost:4000) email as a header
+    const res = await axios.get("http://localhost:4000", {
+      headers: { email: user.user.email },
+    });
+    const orders = await res.data;
+    setOrders(orders.orders);
+  };
+
   useEffect(() => {
     getUser();
   }, []);
 
   useEffect(() => {
-    console.log("user", user);
-    // if (user) {
-    //   getData();
-    // }
+    if (user) {
+      getData();
+    }
   }, [user]);
 
   return (
-    <div>
+    <div className="h-screen overflow-auto">
       <p>Dashboard</p>
       <p onClick={handleLogout}>Sign Out</p>
+      {/* {orders?.map((order) => {
+        return (
+          <div key={order.id}>
+            <p>{order.name}</p>
+            <p>{order.price}</p>
+          </div>
+        );
+      })} */}
     </div>
   );
 }
