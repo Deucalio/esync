@@ -3,7 +3,7 @@ import { auth, signIn, signOut } from "../../auth";
 
 const validCredentials = async (credential) => {
   // send request to nodejs backened
-  const res = await fetch("http://localhost:4000/login", {
+  const res = await fetch("http://127.0.0.1:4000/login", {
     method: "POST",
     body: JSON.stringify(credential),
     headers: { "Content-Type": "application/json" },
