@@ -32,6 +32,10 @@ app.use(function (req, res, next) {
   next();
 });
 
+const generateOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000);
+};
+
 app.get("/", async (req, res) => {
   // res.send("Hello World!");
   // const users = await User.find({});
@@ -67,6 +71,15 @@ app.post("/login", async (req, res) => {
     lastName: "Ali",
     store: "Shopify",
   });
+});
+
+app.post("/register", (req, res) => {
+  // Check if the email is valid and already exists in the database
+  const { email } = req.body;
+  console.log("email: ", email);
+
+  const otp = generateOTP();
+  res.status(200).json(otp);
 });
 
 // _____________________

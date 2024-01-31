@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 const Success = () => {
   return (
@@ -50,7 +51,7 @@ const OTPVerification = ({ otp, setOtp, validEmail, email, setUserInfo }) => {
   useEffect(() => {
     setTimeout(() => {
       mainDiv.current.classList.remove("opacity-0");
-    }, 500);
+    }, 200);
   });
 
   // FINAL FUNCTIONS
@@ -65,7 +66,7 @@ const OTPVerification = ({ otp, setOtp, validEmail, email, setUserInfo }) => {
   return (
     <div
       ref={mainDiv}
-      className="opacity-0 transition-all duration-300 col-span-5 overflow-scroll rounded-3xl border-fuchsia-400 py-12 pl-24 md:pl-8 lg:overflow-hidden"
+      className="opacity-0 transition-all duration-200 col-span-5 overflow-scroll rounded-3xl border-fuchsia-400 py-12 pl-24 md:pl-8 lg:overflow-hidden"
     >
       <ul className="mx-auto -ml-10 flex flex-col items-center gap-4 border-fuchsia-900 text-lg text-slate-200">
         <li className="flex flex-col gap-2">
@@ -117,9 +118,10 @@ const OTPVerification = ({ otp, setOtp, validEmail, email, setUserInfo }) => {
                   <button
                     onClick={resendCode}
                     className={`mt-4 h-10 w-24 rounded-md bg-blue-800 text-xs transition-all duration-500 hover:bg-blue-950
+                    after:content-['60s'] 
                   `}
                   >
-                    Resend
+                    Resend &nbsp;
                   </button>
                 </div>
 
@@ -325,30 +327,12 @@ const Page = () => {
     }
 
     // Send request to server and check if email is already registered
-    const res = await fetch("http://localhost:5000/otp", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify({ email }),
-    });
-    if (res.status === 400) {
-      setLastErrorInput(emailRef);
-      setLastSpanPosition("top-[10.7rem]");
-      spanRef.current.textContent = "Email already registered";
-      spanRef.current.classList.remove("opacity-0");
-      spanRef.current.classList.add("top-[10.7rem]");
-      emailRef.current.focus();
-      emailRef.current.classList.add("border-2");
-      emailRef.current.classList.add("border-rose-700");
-      emailRef.current.classList.remove("focus:outline-indigo-900");
-      return;
-    }
-    if (res.status === 201) {
-      const sentOtp = await res.json();
-      setOtp(sentOtp.otp);
-      console.log("otp: ", otp);
+    try {
+      const res = await axios.post("http://localhost:4000/register", userInfo);
+      console.log("res: ", res.data);
+      setOtp(res.data)
+    } catch (e) {
+      console.log("Error is: ", e);
     }
   };
 
