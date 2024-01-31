@@ -37,6 +37,7 @@ export default function Page() {
   useEffect(() => {
     if (user) {
       getData();
+      console.log("user: ", user)
     }
   }, [user]);
 
@@ -44,6 +45,7 @@ export default function Page() {
     <div className="h-screen overflow-auto">
       <p>Dashboard</p>
       <p onClick={handleLogout}>Sign Out</p>
+      <p>Your Email is: {user?.user?.email}</p>
       {orders?.map((order) => {
         return (
           <div key={order.id}>
