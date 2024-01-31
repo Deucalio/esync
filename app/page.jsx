@@ -44,14 +44,14 @@ export default function Page() {
     <div className="h-screen overflow-auto">
       <p>Dashboard</p>
       <p onClick={handleLogout}>Sign Out</p>
-      {/* {orders?.map((order) => {
+      {orders?.map((order) => {
         return (
           <div key={order.id}>
             <p>{order.name}</p>
             <p>{order.price}</p>
           </div>
         );
-      })} */}
+      })}
     </div>
   );
 }

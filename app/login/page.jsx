@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 // import { auth, signIn, signOut } from "../../auth";
 import Login from "./login";
 import Image from "next/image";
+import axios from "axios";
+import { signUserIn } from "../actions/signUserIn";
 const Page = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -11,9 +13,14 @@ const Page = () => {
   });
   const handleLogin = async (e) => {
     e.preventDefault();
-    
-    const user = await Login(formData);
-    console.log("user", user);
+
+    // const user = await Login(formData);
+    try {
+      const res = await axios.post("http://localhost:4000/login", formData);
+      await signUserIn(res.data);
+    } catch (e) {
+      console.log("error is: ", e);
+    }
     return;
   };
 
