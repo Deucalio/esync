@@ -39,10 +39,10 @@ const Page = () => {
         <div className="col-span-5 overflow-scroll rounded-3xl border-fuchsia-400 py-8 pl-24 md:pl-8 lg:overflow-hidden">
           <ul className="mx-auto -ml-10 flex flex-col items-center gap-7 border-fuchsia-900 text-xl text-slate-200">
             <li className="flex flex-col gap-2">
-              <p className="text-md font-semibold">Login</p>
+              <p className="text-md font-semibold mt-4">Login</p>
             </li>
             <li>
-              <form className="grid border-teal-700 text-xs" action="">
+              <form className="grid border-teal-700 text-xs mt-10" action="">
                 <ul className="">
                   <li className="relative flex flex-col gap-6">
                     <input
@@ -68,7 +68,7 @@ const Page = () => {
 
                     <button
                       onClick={handleLogin}
-                      className="relative mx-auto mt-1 w-32 rounded-md bg-gradient-to-l from-indigo-600 to-violet-700 px-3 py-2 hover:bg-indigo-800 hover:from-indigo-700 hover:to-violet-800"
+                      className="relative mx-auto text-sm mt-1 w-32 rounded-md bg-gradient-to-l from-indigo-600 to-violet-700 px-3 py-2 hover:bg-indigo-800 hover:from-indigo-700 hover:to-violet-800"
                     >
                       Login
                       <span className="loader absolute right-4 opacity-0"></span>
