@@ -34,9 +34,45 @@ app.use(function (req, res, next) {
   next();
 });
 
+const { PrismaClient } = require("./generated/client"); // Adjust the path based on your project structure
+
+const prisma = new PrismaClient();
+
 const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000);
 };
+
+app.get("/test", async (req, res) => {
+  try {
+    // Insert a user with a store
+    // const user = await prisma.user.create({
+    //   data: {
+    //     firstName: "Huzaifa",
+    //     lastName: "Doe",
+    //     email: "john.doe@example.com",
+    //     password: "hashed_password", // Hash the password using a secure method
+    //     phone: "1234567890",
+    //     address: "123 Main St, City",
+    //   },
+    // });
+
+    const store = await prisma.store.create({
+      data: {
+        userId: 2, // Specify the userId for the associated user
+        name: "SHOPIFY STORE",
+        imageURL: "https://example.com/store-image.jpg",
+        storeInfo: { key: "value" },
+      },
+    });
+
+    console.log("store Inserted:", store);
+  } catch (error) {
+    console.error("Error inserting sample data:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+  res.status(200).json({ message: "User has been inserted" });
+});
 
 app.get("/", async (req, res) => {
   // res.send("Hello World!");
@@ -88,7 +124,6 @@ app.post("/otp", async (req, res) => {
     html: `
     <p style="font-weight: bold;">Please use the following OTP to complete the verification process:</p>
     <p style="background-color: #f5f5f5; padding: 10px; font-size: 16px; font-weight: bold;">OTP Code: ${otp}</p>
-    <p>Thank you for choosing Nakson Services</p>
     `,
   });
 
