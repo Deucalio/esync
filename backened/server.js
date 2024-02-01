@@ -19,10 +19,12 @@ const bwipjs = require("bwip-js");
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 require("dotenv").config();
-
+// import { Resend } from "resend";
+const { Resend } = require("resend");
+const resend = new Resend(process.env.RESEND_API_KEY);
 app.use(bodyParser.json());
 app.use(cors({}));
-
+resend.apiKeys.create({ name: "Production" });
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -73,13 +75,30 @@ app.post("/login", async (req, res) => {
   });
 });
 
-app.post("/register", (req, res) => {
+app.post("/otp", async (req, res) => {
   // Check if the email is valid and already exists in the database
   const { email } = req.body;
   console.log("email: ", email);
-
   const otp = generateOTP();
+
+  const { data, error } = await resend.emails.send({
+    from: "ESync@mail.nakson.services",
+    to: ["captain.gaze@gmail.com"],
+    subject: "One-Time Password (OTP) Verification",
+    html: `
+    <p style="font-weight: bold;">Please use the following OTP to complete the verification process:</p>
+    <p style="background-color: #f5f5f5; padding: 10px; font-size: 16px; font-weight: bold;">OTP Code: ${otp}</p>
+    <p>Thank you for choosing Nakson Services</p>
+    `,
+  });
+
   res.status(200).json(otp);
+});
+
+app.post("/register", async (req, res) => {
+  const data = req.body;
+  console.log("data: ", data);
+  res.status(200).json({ message: "User has been registered successfully" });
 });
 
 // _____________________

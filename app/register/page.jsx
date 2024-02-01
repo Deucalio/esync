@@ -9,7 +9,7 @@ const Success = () => {
     <div className="col-span-5 overflow-scroll rounded-3xl border-fuchsia-400 py-12 pl-24 md:pl-8 lg:overflow-hidden">
       <ul className="mx-auto -ml-10 flex flex-col items-center gap-4 border-fuchsia-900 text-lg text-slate-200 ">
         <li className="flex flex-col gap-2">
-          <p className="text-md font-semibold">Success</p>
+          <p className="text-sm font-semibold">Success</p>
           <div className="flex flex-row gap-3">
             <span className="h-2 w-14 rounded-3xl bg-indigo-950"></span>
             <span className="h-2 w-14 rounded-3xl bg-indigo-950"></span>
@@ -38,36 +38,68 @@ const Success = () => {
   );
 };
 
-const OTPVerification = ({ otp, setOtp, validEmail, email, setUserInfo }) => {
-  console.log("otp: ", otp);
-  const [changeEmail, setChangeEmail] = useState(false);
+const OTPVerification = ({
+  userInfo,
+  otp,
+  setOtp,
+  validEmail,
+  email,
+  setUserInfo,
+}) => {
+  const [resendTimer, setResendTimer] = useState(60);
   const inputRef = useRef(null);
+  const codeInputElement = useRef(null);
+
+  const invalidOTPSpan = useRef(null);
 
   const handleChangeEmail = (e) => {
     setUserInfo({ ...setUserInfo, email: e.target.value });
   };
 
-  const mainDiv = useRef(null);
+  // FINAL FUNCTIONS
+  const resendCode = async (e) => {
+    // reset the timer
+    setResendTimer(60);
+    // send the otp again to the user
+    const res = await axios.post("http://localhost:4000/otp", email);
+    setOtp(res.data);
+    console.log("NEW OTP IS: ", res.data);
+    e.preventDefault();
+  };
+
+  const registerUser = async (e) => {
+    e.preventDefault();
+
+    const OTPUserEntered = Number(codeInputElement.current.value);
+
+    console.log("otp: ", otp);
+    if (OTPUserEntered === otp) {
+      console.log("OTP MATCHED");
+
+      // Register the User into our DB
+      // Send request to backend
+      const res = await axios.post("http://localhost:4000/register", userInfo);
+      console.log("res: ", res.data);
+
+      return;
+    }
+    invalidOTPSpan.current.classList.remove("opacity-0");
+    codeInputElement.current.classList.add("border-red-700", "border-2");
+    console.log("INVALID OTP");
+    return;
+  };
+
   useEffect(() => {
-    setTimeout(() => {
-      mainDiv.current.classList.remove("opacity-0");
-    }, 200);
+    // change resend button to timer
+    if (resendTimer > 0) {
+      setTimeout(() => {
+        setResendTimer(resendTimer - 1);
+      }, 1000);
+    }
   });
 
-  // FINAL FUNCTIONS
-  const resendCode = (e) => {
-    e.preventDefault();
-  };
-
-  const registerUser = (e) => {
-    e.preventDefault();
-  };
-
   return (
-    <div
-      ref={mainDiv}
-      className="opacity-0 transition-all duration-200 col-span-5 overflow-scroll rounded-3xl border-fuchsia-400 py-12 pl-24 md:pl-8 lg:overflow-hidden"
-    >
+    <div className=" transition-all duration-200 col-span-5 overflow-scroll rounded-3xl border-fuchsia-400 py-12 pl-24 md:pl-8 lg:overflow-hidden">
       <ul className="mx-auto -ml-10 flex flex-col items-center gap-4 border-fuchsia-900 text-lg text-slate-200">
         <li className="flex flex-col gap-2">
           <p className="text-md font-semibold">Verification</p>
@@ -91,7 +123,7 @@ const OTPVerification = ({ otp, setOtp, validEmail, email, setUserInfo }) => {
                   className="h-10 w-60 rounded-md  bg-gray-900 px-3 py-1 outline-none outline-2 placeholder:opacity-50 focus:outline-indigo-900"
                   type="text"
                   onChange={handleChangeEmail}
-                  value={changeEmail ? email : ""}
+                  // value={changeEmail ? email : ""}
                 />
                 <span
                   className={`opacity-0 transition-all duration-300 absolute top-[10.5rem]  text-xs text-red-600`}
@@ -107,28 +139,35 @@ const OTPVerification = ({ otp, setOtp, validEmail, email, setUserInfo }) => {
                   Change Email
                 </span>
 
-                <div className="flex flex-row items-center justify-center gap-3">
+                <div className="flex flex-row items-center justify-center gap-3 relative ">
                   <input
+                    ref={codeInputElement}
                     placeholder="Code"
-                    className="mt-4 h-10 w-32 rounded-md border-slate-700 bg-slate-900 px-3 py-1 outline-none outline-2 placeholder:opacity-50 focus:outline-indigo-900"
+                    className="mt-4 h-10 w-32 rounded-md  bg-slate-900 px-3 py-1 outline-none outline-2 placeholder:opacity-50 focus:outline-indigo-900 transition-all"
                     type="number"
-                    name=""
-                    id=""
                   />
+                  <span
+                    ref={invalidOTPSpan}
+                    className="text-red-500 text-xs absolute left-2 top-16 opacity-0 transition-all"
+                  >
+                    Invalid OTP
+                  </span>
                   <button
+                    disabled={resendTimer > 0}
                     onClick={resendCode}
-                    className={`mt-4 h-10 w-24 rounded-md bg-blue-800 text-xs transition-all duration-500 hover:bg-blue-950
-                    after:content-['60s'] 
+                    className={`mt-4 h-10 w-24 rounded-md ${
+                      resendTimer > 0 ? "bg-blue-950" : "bg-blue-800"
+                    } text-xs transition-all duration-500 hover:bg-blue-950
                   `}
                   >
-                    Resend &nbsp;
+                    Resend {resendTimer}
                   </button>
                 </div>
 
                 <button
                   onClick={registerUser}
                   className={`mx-auto mt-10 w-32 px-3 py-2 rounded-md bg-gradient-to-l from-indigo-600 to-violet-700  ${[
-                    "hover:bg-indigo-800, hover:from-indigo-700, hover:to-violet-800",
+                    "hover:bg-indigo-800, hover:from-indigo-700, hover:to-violet-800 text-sm",
                   ].join(" ")}`}
                 >
                   Register
@@ -143,6 +182,7 @@ const OTPVerification = ({ otp, setOtp, validEmail, email, setUserInfo }) => {
 };
 
 const Register = ({
+  registerRef,
   firstNameRef,
   lastNameRef,
   emailRef,
@@ -216,11 +256,12 @@ const Register = ({
                 </p>
 
                 <button
+                  ref={registerRef}
                   onClick={proceedToOTP}
-                  className="relative mx-auto mt-1 w-32 rounded-md bg-gradient-to-l from-indigo-600 to-violet-700 px-3 py-2 hover:bg-indigo-800 hover:from-indigo-700 hover:to-violet-800"
+                  className="relative mx-auto text-sm mt-1 w-32 rounded-md bg-gradient-to-l from-indigo-600 to-violet-700 px-3 py-2 hover:bg-indigo-800 hover:from-indigo-700 hover:to-violet-800"
                 >
                   Next
-                  <span className="loader absolute right-4 opacity-0"></span>
+                  <div className="loader absolute top-[10px] right-4 opacity-0 "></div>
                 </button>
               </li>
               <li className="md:mt-4 ml-4">
@@ -248,6 +289,8 @@ const Page = () => {
     email: "",
     password: "",
   });
+  const registerRef = useRef(null);
+
   const [otp, setOtp] = useState("");
   const [lastErrorInput, setLastErrorInput] = useState(null);
   const [lastSpanPosition, setLastSpanPosition] = useState("");
@@ -265,6 +308,9 @@ const Page = () => {
 
   const proceedToOTP = async (e) => {
     e.preventDefault();
+    registerRef.current.disabled = true;
+
+    // Disable button
 
     if (lastErrorInput !== null && lastSpanPosition !== "") {
       // Remove error message
@@ -274,11 +320,13 @@ const Page = () => {
       spanRef.current.classList.add("opacity-0");
       spanRef.current.classList.remove(lastSpanPosition);
       console.log("lastErrorInput", lastErrorInput);
+      registerRef.current.disabled = false;
     }
 
     // Validate user input
     const { firstName, lastName, email, password } = userInfo;
     if (firstName === "") {
+      registerRef.current.disabled = false;
       setLastErrorInput(firstNameRef);
       setLastSpanPosition("top-[2.7rem]");
       //   spanRef.current.classList.add("opacity-100");
@@ -292,6 +340,8 @@ const Page = () => {
       firstNameRef.current.classList.remove("focus:outline-indigo-900");
       return;
     } else if (lastName === "") {
+      registerRef.current.disabled = false;
+
       setLastErrorInput(lastNameRef);
       setLastSpanPosition("top-[6.7rem]");
       spanRef.current.textContent = "Last Name is required";
@@ -303,6 +353,8 @@ const Page = () => {
       lastNameRef.current.classList.remove("focus:outline-indigo-900");
       return;
     } else if (email === "" || !validEmail(email)) {
+      registerRef.current.disabled = false;
+
       setLastErrorInput(emailRef);
       setLastSpanPosition("top-[10.7rem]");
       spanRef.current.textContent = "Invalid Email Address";
@@ -314,6 +366,8 @@ const Page = () => {
       emailRef.current.classList.remove("focus:outline-indigo-900");
       return;
     } else if (password === "") {
+      registerRef.current.disabled = false;
+
       setLastErrorInput(passwordRef);
       setLastSpanPosition("top-[14.7rem]");
       spanRef.current.textContent = "Password is required";
@@ -328,9 +382,10 @@ const Page = () => {
 
     // Send request to server and check if email is already registered
     try {
-      const res = await axios.post("http://localhost:4000/register", userInfo);
+      const res = await axios.post("http://localhost:4000/otp", userInfo);
+      registerRef.current.classList.add("cursor-default");
       console.log("res: ", res.data);
-      setOtp(res.data)
+      setOtp(res.data);
     } catch (e) {
       console.log("Error is: ", e);
     }
@@ -350,6 +405,7 @@ const Page = () => {
         </div>
         {otp === "" && (
           <Register
+            registerRef={registerRef}
             firstNameRef={firstNameRef}
             lastNameRef={lastNameRef}
             emailRef={emailRef}
@@ -362,6 +418,7 @@ const Page = () => {
         )}
         {otp !== "" && (
           <OTPVerification
+            userInfo={userInfo}
             otp={otp}
             setOtp={setOtp}
             validEmail={validEmail}
