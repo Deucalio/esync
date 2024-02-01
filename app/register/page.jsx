@@ -39,6 +39,7 @@ const Success = () => {
 };
 
 const OTPVerification = ({
+  setSuccess,
   userInfo,
   otp,
   setOtp,
@@ -63,7 +64,6 @@ const OTPVerification = ({
     // send the otp again to the user
     const res = await axios.post("http://localhost:4000/otp", email);
     setOtp(res.data);
-    console.log("NEW OTP IS: ", res.data);
     e.preventDefault();
   };
 
@@ -72,20 +72,17 @@ const OTPVerification = ({
 
     const OTPUserEntered = Number(codeInputElement.current.value);
 
-    console.log("otp: ", otp);
     if (OTPUserEntered === otp) {
-      console.log("OTP MATCHED");
-
       // Register the User into our DB
       // Send request to backend
       const res = await axios.post("http://localhost:4000/register", userInfo);
+      setSuccess(true);
       console.log("res: ", res.data);
 
       return;
     }
     invalidOTPSpan.current.classList.remove("opacity-0");
     codeInputElement.current.classList.add("border-red-700", "border-2");
-    console.log("INVALID OTP");
     return;
   };
 
@@ -182,7 +179,7 @@ const OTPVerification = ({
 };
 
 const Register = ({
-  registerRef,
+  buttonDisabled,
   firstNameRef,
   lastNameRef,
   emailRef,
@@ -256,8 +253,8 @@ const Register = ({
                 </p>
 
                 <button
-                  ref={registerRef}
                   onClick={proceedToOTP}
+                  disabled={buttonDisabled}
                   className="relative mx-auto text-sm mt-1 w-32 rounded-md bg-gradient-to-l from-indigo-600 to-violet-700 px-3 py-2 hover:bg-indigo-800 hover:from-indigo-700 hover:to-violet-800"
                 >
                   Next
@@ -289,11 +286,19 @@ const Page = () => {
     email: "",
     password: "",
   });
-  const registerRef = useRef(null);
 
   const [otp, setOtp] = useState("");
   const [lastErrorInput, setLastErrorInput] = useState(null);
   const [lastSpanPosition, setLastSpanPosition] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  const [btnDisabled, setBtnDisabled] = useState(false);
+
+  useEffect(() => {
+    if (otp === "") {
+      setBtnDisabled(false);
+    }
+  }, [otp]);
 
   const spanRef = useRef(null);
   const firstNameRef = useRef(null);
@@ -308,7 +313,6 @@ const Page = () => {
 
   const proceedToOTP = async (e) => {
     e.preventDefault();
-    registerRef.current.disabled = true;
 
     // Disable button
 
@@ -319,14 +323,11 @@ const Page = () => {
       lastErrorInput.current.classList.add("focus:outline-indigo-900");
       spanRef.current.classList.add("opacity-0");
       spanRef.current.classList.remove(lastSpanPosition);
-      console.log("lastErrorInput", lastErrorInput);
-      registerRef.current.disabled = false;
     }
 
     // Validate user input
     const { firstName, lastName, email, password } = userInfo;
     if (firstName === "") {
-      registerRef.current.disabled = false;
       setLastErrorInput(firstNameRef);
       setLastSpanPosition("top-[2.7rem]");
       //   spanRef.current.classList.add("opacity-100");
@@ -340,8 +341,6 @@ const Page = () => {
       firstNameRef.current.classList.remove("focus:outline-indigo-900");
       return;
     } else if (lastName === "") {
-      registerRef.current.disabled = false;
-
       setLastErrorInput(lastNameRef);
       setLastSpanPosition("top-[6.7rem]");
       spanRef.current.textContent = "Last Name is required";
@@ -353,8 +352,6 @@ const Page = () => {
       lastNameRef.current.classList.remove("focus:outline-indigo-900");
       return;
     } else if (email === "" || !validEmail(email)) {
-      registerRef.current.disabled = false;
-
       setLastErrorInput(emailRef);
       setLastSpanPosition("top-[10.7rem]");
       spanRef.current.textContent = "Invalid Email Address";
@@ -366,8 +363,6 @@ const Page = () => {
       emailRef.current.classList.remove("focus:outline-indigo-900");
       return;
     } else if (password === "") {
-      registerRef.current.disabled = false;
-
       setLastErrorInput(passwordRef);
       setLastSpanPosition("top-[14.7rem]");
       spanRef.current.textContent = "Password is required";
@@ -379,15 +374,26 @@ const Page = () => {
       passwordRef.current.classList.remove("focus:outline-indigo-900");
       return;
     }
+    setBtnDisabled(true);
 
     // Send request to server and check if email is already registered
     try {
       const res = await axios.post("http://localhost:4000/otp", userInfo);
-      registerRef.current.classList.add("cursor-default");
-      console.log("res: ", res.data);
       setOtp(res.data);
     } catch (e) {
-      console.log("Error is: ", e);
+      if (e.request.status === 409) {
+        setLastErrorInput(emailRef);
+        setLastSpanPosition("top-[10.7rem]");
+        spanRef.current.textContent = "Email Already Registered";
+        spanRef.current.classList.remove("opacity-0");
+        spanRef.current.classList.add("top-[10.7rem]");
+        emailRef.current.focus();
+        emailRef.current.classList.add("border-2");
+        emailRef.current.classList.add("border-rose-700");
+        emailRef.current.classList.remove("focus:outline-indigo-900");
+        setBtnDisabled(false);
+      }
+      return;
     }
   };
 
@@ -405,7 +411,7 @@ const Page = () => {
         </div>
         {otp === "" && (
           <Register
-            registerRef={registerRef}
+            buttonDisabled={btnDisabled}
             firstNameRef={firstNameRef}
             lastNameRef={lastNameRef}
             emailRef={emailRef}
@@ -416,8 +422,9 @@ const Page = () => {
             setUserInfo={setUserInfo}
           />
         )}
-        {otp !== "" && (
+        {otp !== "" && success === false && (
           <OTPVerification
+            setSuccess={setSuccess}
             userInfo={userInfo}
             otp={otp}
             setOtp={setOtp}
@@ -426,7 +433,7 @@ const Page = () => {
             setUserInfo={setUserInfo}
           />
         )}
-        {/* <Success /> */}
+        {success && <Success />}
       </section>
     </main>
   );

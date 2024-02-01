@@ -33,7 +33,7 @@ app.use(function (req, res, next) {
   );
   next();
 });
-
+const bcrypt = require("bcryptjs");
 const { PrismaClient } = require("./generated/client"); // Adjust the path based on your project structure
 
 const prisma = new PrismaClient();
@@ -114,7 +114,15 @@ app.post("/login", async (req, res) => {
 app.post("/otp", async (req, res) => {
   // Check if the email is valid and already exists in the database
   const { email } = req.body;
-  console.log("email: ", email);
+
+  const user = await prisma.user.findFirst({
+    where: { email: email },
+  });
+
+  if (user) {
+    return res.status(409).json({ message: "Email already exists" });
+  }
+
   const otp = generateOTP();
 
   const { data, error } = await resend.emails.send({
@@ -131,8 +139,36 @@ app.post("/otp", async (req, res) => {
 });
 
 app.post("/register", async (req, res) => {
-  const data = req.body;
-  console.log("data: ", data);
+  const { firstName, lastName, email, password } = req.body;
+  console.log("req.body", req.body);
+
+  const salt = await bcrypt.genSalt();
+  const passwordHash = await bcrypt.hash(password, salt);
+  // data:  {
+  //   firstName: 'asd',
+  //   lastName: 'asd',
+  //   email: 'john.doe123@example.com',
+  //   password: '23'
+  // }
+  try {
+    // Insert a user with a store
+    const user = await prisma.user.create({
+      data: {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: passwordHash, // Hash the password using a secure method
+        phone: "null",
+        address: "null",
+      },
+    });
+    console.log("User Inserted:", user);
+  } catch (error) {
+    console.error("Error inserting sample data:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  } finally {
+    await prisma.$disconnect();
+  }
   res.status(200).json({ message: "User has been registered successfully" });
 });
 
@@ -164,7 +200,6 @@ app.get("/orders", async (req, res) => {
 
   // res.send(orders);
 });
-
 // _____________________
 
 app.post("/orders", async (req, res) => {
